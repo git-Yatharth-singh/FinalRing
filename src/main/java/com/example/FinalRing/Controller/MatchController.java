@@ -5,11 +5,14 @@ import com.example.FinalRing.Response.MatchResponse;
 import com.example.FinalRing.Service.MatchService;
 import com.example.FinalRing.entity.Match;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/matches")
+@RestController
+@RequestMapping("/matches")
 public class MatchController {
     private final MatchService matchService;
 
@@ -27,5 +30,17 @@ public class MatchController {
     @GetMapping("/{matchId}")
     public MatchResponse getMatch(@PathVariable long matchId){
         return matchService.getMatch(matchId);
+    }
+
+    @PostMapping("/{matchId}/join")
+    public ResponseEntity<MatchResponse> joinMatch(@PathVariable long matchId){
+        MatchResponse response = matchService.joinMatch(matchId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @DeleteMapping("/{matchId}/leave")
+    public ResponseEntity<MatchResponse> leaveMatch(@PathVariable long matchId){
+        MatchResponse response=matchService.leaveMatch(matchId);
+        return ResponseEntity.ok(response);
     }
 }

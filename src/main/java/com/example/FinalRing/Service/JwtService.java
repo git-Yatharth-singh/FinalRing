@@ -34,17 +34,20 @@ public class JwtService {
     }
 
     public String validateToken(String jwt){
-        try{
-        return Jwts.parser()
-                .verifyWith(getKey())
-                .build()
-                .parseSignedClaims(jwt)
-                .getPayload()
-                .getSubject();
+        try {
+            return Jwts.parser()
+                    .verifyWith(getKey())
+                    .build()
+                    .parseSignedClaims(jwt)
+                    .getPayload()
+                    .getSubject();
         }
-        catch(JwtException e){
+        catch (JwtException e) {
+            System.out.println("JWT ERROR: " + e.getClass().getName());
+            System.out.println("JWT MESSAGE: " + e.getMessage());
             throw new JwtInvalid("Not allowed");
         }
     }
-}
+    }
+
 

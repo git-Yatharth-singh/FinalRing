@@ -1,6 +1,7 @@
 package com.example.FinalRing.Exception;
 
 
+import com.example.FinalRing.entity.Match;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -47,5 +48,40 @@ public class GlobalExceptionManager {
             errorMap.put(error.getField(), error.getDefaultMessage());
         }
         return ResponseEntity.badRequest().body(errorMap);
+    }
+
+    @ExceptionHandler(MatchNotFoundException.class)
+    public ResponseEntity<String> MatchException(MatchNotFoundException e){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(PlayerAlreadyJoined.class)
+    public ResponseEntity<String> playerJoined(PlayerAlreadyJoined e){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(MatchFullException.class)
+    public ResponseEntity<String> matchFull(MatchFullException e){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(MatchStartedException.class)
+    public ResponseEntity<String> matchStarted(MatchStartedException e){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(PlayerNotInMatchException.class)
+    public ResponseEntity<String> playerInMatch(PlayerNotInMatchException e){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(e.getMessage());
     }
 }
