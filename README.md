@@ -1,42 +1,255 @@
-# Final Ring 🎯
+# Final Ring 🎮
 
 Final Ring is a real-time multiplayer arena game backend built with **Java and Spring Boot**.
 
-The project is being developed incrementally to explore how a backend evolves from a simple REST application into a **real-time, scalable, distributed, and fault-tolerant multiplayer platform**.
-
-The focus is not just on using different technologies, but on understanding **why each technology becomes useful as the system grows**.
+The project is designed as a learning-first backend engineering project, evolving from a simple REST backend into a real-time, distributed, scalable, and fault-tolerant multiplayer system.
 
 ---
 
-# 🎮 Game Concept
+## 🛠️ Tech Stack
 
-Final Ring is currently designed around a short free-for-all arena match.
+- Java
+- Spring Boot
+- Spring Security
+- JWT
+- BCrypt
+- PostgreSQL
+- JPA / Hibernate
+- Maven
+- Bean Validation
 
-### Match Rules
+---
 
-- Minimum players: **2**
-- Maximum players: **6**
-- Match duration: **5 minutes**
-- Players respawn after being killed
-- Players can continue fighting throughout the match
-- The player with the most kills when the timer ends wins
-- If two players have the same number of kills, the player with fewer deaths ranks higher
-- If both kills and deaths are equal, the player who appears first in the sorted result receives the higher rank
-- Only the match creator can start the match
+# 🎯 Game Concept
 
-### Example
+- Free-for-all multiplayer arena
+- 2–6 players per match
+- 5-minute matches
+- Players respawn after death
+- Most kills wins
+- Fewer deaths wins the tie
+- Match creator starts the match
 
-```text
-5 Minute Match
+---
 
-Player A → 18 kills / 7 deaths
-Player B → 15 kills / 4 deaths
-Player C → 15 kills / 8 deaths
-Player D → 10 kills / 6 deaths
+# 🚀 Roadmap
 
-Final Results
+## V1 — Core Backend
 
-Rank 1 → Player A
-Rank 2 → Player B
-Rank 3 → Player C
-Rank 4 → Player D
+### Completed
+- [x] Player registration
+- [x] Login
+- [x] BCrypt password hashing
+- [x] JWT authentication
+- [x] Spring Security
+- [x] Player profile
+- [x] Request validation
+- [x] Global exception handling
+- [x] Match creation
+- [x] Match joining
+- [x] Match leaving
+- [x] Match creator tracking
+- [x] Match lifecycle
+- [x] Match start
+- [x] Match finish
+- [x] Match player tracking
+- [x] Kill tracking
+- [x] Death tracking
+- [x] Match results
+- [x] Player ranking
+
+### Remaining
+- [ ] Automated testing
+- [ ] Concurrency testing
+- [ ] Database integrity review
+- [ ] API cleanup
+- [ ] Security hardening
+- [ ] End-to-end testing
+- [ ] Final V1 review
+
+---
+
+## V2 — Real-Time Multiplayer
+
+- [ ] WebSockets
+- [ ] Real-time player movement
+- [ ] Position synchronization
+- [ ] Shooting and combat
+- [ ] Damage system
+- [ ] Kill/death events
+- [ ] Respawning
+- [ ] Real-time match state
+- [ ] Live scoreboard
+- [ ] Player disconnect handling
+- [ ] Automatic 5-minute match timer
+
+---
+
+## V3 — Kafka
+
+- [ ] Kafka producers
+- [ ] Kafka consumers
+- [ ] Topics
+- [ ] Consumer groups
+- [ ] Game events
+- [ ] Event-driven architecture
+- [ ] Event ordering
+- [ ] Duplicate event handling
+- [ ] Consumer failure handling
+- [ ] Event replay
+
+---
+
+## V4 — Redis
+
+- [ ] Matchmaking
+- [ ] Active match state
+- [ ] Player state
+- [ ] Leaderboards
+- [ ] Caching
+- [ ] TTL
+- [ ] Atomic operations
+- [ ] Concurrency handling
+- [ ] Distributed state
+
+---
+
+## V5 — Microservices
+
+- [ ] Auth Service
+- [ ] Matchmaking Service
+- [ ] Game Service
+- [ ] Stats Service
+- [ ] Leaderboard Service
+- [ ] Notification Service
+- [ ] Service boundaries
+- [ ] Independent deployment
+- [ ] Independent scaling
+- [ ] Service discovery
+- [ ] Fault isolation
+- [ ] Distributed failure handling
+
+---
+
+## V6 — gRPC
+
+- [ ] Protocol Buffers
+- [ ] Service contracts
+- [ ] Internal RPC
+- [ ] Unary RPC
+- [ ] Streaming
+- [ ] Deadlines
+- [ ] Timeouts
+- [ ] Error handling
+- [ ] Contract compatibility
+
+---
+
+## V7 — Docker
+
+- [ ] Dockerfiles
+- [ ] Docker images
+- [ ] Containers
+- [ ] Container networking
+- [ ] Environment variables
+- [ ] Docker Compose
+- [ ] Run complete Final Ring stack with containers
+
+---
+
+## V8 — Kubernetes
+
+- [ ] Pods
+- [ ] Deployments
+- [ ] Services
+- [ ] Replicas
+- [ ] Nodes
+- [ ] Service discovery
+- [ ] Health checks
+- [ ] Readiness probes
+- [ ] Liveness probes
+- [ ] Rolling deployments
+- [ ] Horizontal scaling
+- [ ] Self-healing
+- [ ] Kubernetes configuration
+
+---
+
+## V9 — Distributed Systems Testing
+
+- [ ] Load testing
+- [ ] Concurrent players
+- [ ] WebSocket load testing
+- [ ] REST load testing
+- [ ] Matchmaking load testing
+- [ ] Kafka throughput testing
+- [ ] Redis load testing
+- [ ] Database load testing
+- [ ] Race-condition testing
+- [ ] Service failure testing
+- [ ] Kafka failure testing
+- [ ] Redis failure testing
+- [ ] Database failure testing
+- [ ] Network failure testing
+- [ ] Timeout testing
+- [ ] Retry testing
+- [ ] Idempotency testing
+- [ ] Kubernetes failure testing
+- [ ] Automatic recovery testing
+- [ ] Performance monitoring
+
+---
+
+# 🤖 Multiplayer Simulator
+
+- [ ] Simulated players
+- [ ] Automated match joining
+- [ ] WebSocket connections
+- [ ] Simulated movement
+- [ ] Simulated combat
+- [ ] Simulated kills/deaths
+- [ ] Hundreds of concurrent players
+- [ ] Thousands of concurrent players
+- [ ] Performance measurement
+
+---
+
+# 🤖 Machine Learning
+
+- [ ] Collect gameplay data
+- [ ] Player skill rating
+- [ ] Match quality prediction
+- [ ] Player behavior analysis
+- [ ] Smurf detection
+- [ ] Python ML service
+- [ ] Integrate ML with Final Ring backend
+
+---
+
+# 📊 Final Ring Evolution
+
+**V1** → Spring Boot + PostgreSQL + REST  
+**V2** → WebSockets  
+**V3** → Kafka  
+**V4** → Redis  
+**V5** → Microservices  
+**V6** → gRPC  
+**V7** → Docker  
+**V8** → Kubernetes  
+**V9** → Load + Failure + Distributed Testing  
+**ML** → Machine Learning Integration
+
+---
+
+# 📌 Current Status
+
+**V1 — In Progress 🟡**
+
+### Done
+Core authentication, JWT security, player profiles, validation, match management, match lifecycle, player tracking, kills/deaths, and match results.
+
+### Remaining
+Testing, concurrency, database integrity, API hardening, security review, end-to-end verification, and final V1 review.
+
+### Next
+**V2 — Real-Time Multiplayer with WebSockets**
