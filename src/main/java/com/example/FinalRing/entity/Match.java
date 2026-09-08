@@ -26,5 +26,10 @@ public class Match {
     @CreationTimestamp
     private Instant createdAt;
 
+    @ManyToOne
+    private Player creator;
+
     private Instant startedAt;
+
+    private Instant finishedAt;
 }

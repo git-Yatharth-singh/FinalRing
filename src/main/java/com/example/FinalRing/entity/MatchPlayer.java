@@ -1,6 +1,7 @@
 package com.example.FinalRing.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,4 +31,8 @@ public class MatchPlayer {
     private int kills;
 
     private Instant joinedAt;
+
+    private Integer rank;
+
+    private int deaths;
 }

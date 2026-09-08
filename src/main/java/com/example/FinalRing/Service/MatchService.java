@@ -3,6 +3,7 @@ package com.example.FinalRing.Service;
 import com.example.FinalRing.Exception.*;
 import com.example.FinalRing.Request.MatchRequest;
 import com.example.FinalRing.Response.MatchResponse;
+import com.example.FinalRing.Response.MatchResultResponse;
 import com.example.FinalRing.entity.Match;
 import com.example.FinalRing.entity.MatchPlayer;
 import com.example.FinalRing.entity.MatchStatus;
@@ -14,6 +15,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class MatchService {
@@ -50,6 +56,7 @@ public class MatchService {
         Match match=new Match();
         match.setMaxPlayers(matchRequest.getMaxPlayers());
         match.setMatchStatus(MatchStatus.WAITING);
+        match.setCreator(player);
         matchRepo.save(match);
         matchPlayerService.createMatchPlayer(match,player);
         MatchResponse response=new MatchResponse(match);
@@ -87,6 +94,58 @@ public class MatchService {
         MatchResponse matchResponse=new MatchResponse(match);
         matchResponse.setCurrentPlayers((int)matchPlayerRepo.countByMatchId(matchId));
         return matchResponse;
+    }
+
+    public MatchResponse startMatch(long matchId,String creatorEmail) throws NotCreatorException {
+        Match match=matchRepo.findById(matchId).orElseThrow(()->new MatchNotFoundException("Match not found"));
+        Player player=playerRepo.findByEmail(creatorEmail).orElseThrow(()->new NotCreatorException("Not the creator of the match"));
+        if(player!=match.getCreator()){
+            throw new NotCreatorException("Only the leader can start the match");
+        }
+        if(match.getMatchStatus()!=MatchStatus.WAITING){
+            throw new MatchStartedException("Match has ended");
+        }
+        long players=matchPlayerRepo.countByMatchId(matchId);
+        if(players<2){
+            throw new InsufficientException("A match must contain atleast 2 players");
+        }
+        match.setMatchStatus(MatchStatus.RUNNING);
+        match.setStartedAt(Instant.now());
+        matchRepo.save(match);
+        MatchResponse response=new MatchResponse(match);
+        response.setCurrentPlayers((int)players);
+        return response;
+    }
+
+    public MatchResponse finishMatch(long matchId){
+        Match match=matchRepo.findById(matchId).orElseThrow(()->new MatchNotFoundException("Match not found"));
+        if(match.getMatchStatus()!=MatchStatus.RUNNING){
+            throw new MatchNotRunningException("Match is not running");
+        }
+        match.setMatchStatus(MatchStatus.FINISHED);
+        match.setFinishedAt(Instant.now());
+        matchRepo.save(match);
+        MatchResponse matchResponse=new MatchResponse(match);
+        return matchResponse;
+    }
+
+    public List<MatchResultResponse> matchResult(long matchId){
+        List<MatchResultResponse> response=new ArrayList<>();
+        Match match=matchRepo.findById(matchId).orElseThrow(()->new MatchNotFoundException("Match not found"));
+        if(match.getMatchStatus()==MatchStatus.RUNNING || match.getMatchStatus()==MatchStatus.WAITING){
+            throw new MatchNotRunningException("Match has not ended");
+        }
+        List<MatchPlayer> players=matchPlayerRepo.findByMatchId(matchId);
+        players.sort(Comparator.comparing(MatchPlayer::getKills).reversed().thenComparing(MatchPlayer::getDeaths));
+        for(int i=0;i<players.size();i++){
+            MatchResultResponse resultResponse=new MatchResultResponse();
+            resultResponse.setPlayerName(players.get(i).getPlayer().getName());
+            resultResponse.setKills(players.get(i).getKills());
+            resultResponse.setDeaths(players.get(i).getDeaths());
+            resultResponse.setRank(i+1);
+            response.add(resultResponse);
+        }
+        return response;
     }
 }
 

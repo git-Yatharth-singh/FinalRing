@@ -43,8 +43,7 @@ public class JwtService {
                     .getSubject();
         }
         catch (JwtException e) {
-            System.out.println("JWT ERROR: " + e.getClass().getName());
-            System.out.println("JWT MESSAGE: " + e.getMessage());
+            e.printStackTrace();
             throw new JwtInvalid("Not allowed");
         }
     }

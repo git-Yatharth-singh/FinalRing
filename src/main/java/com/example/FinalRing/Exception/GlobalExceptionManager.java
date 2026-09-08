@@ -84,4 +84,25 @@ public class GlobalExceptionManager {
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(e.getMessage());
     }
+
+    @ExceptionHandler(NotCreatorException.class)
+    public ResponseEntity<String> notCreator(NotCreatorException e){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(InsufficientException.class)
+    public ResponseEntity<String> notCreator(InsufficientException e){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(MatchNotRunningException.class)
+    public ResponseEntity<String> notCreator(MatchNotRunningException e){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(e.getMessage());
+    }
 }
