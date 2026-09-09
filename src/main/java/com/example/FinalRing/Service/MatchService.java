@@ -95,15 +95,15 @@ public class MatchService {
         matchResponse.setCurrentPlayers((int)matchPlayerRepo.countByMatchId(matchId));
         return matchResponse;
     }
-
+@Transactional
     public MatchResponse startMatch(long matchId,String creatorEmail) throws NotCreatorException {
         Match match=matchRepo.findById(matchId).orElseThrow(()->new MatchNotFoundException("Match not found"));
         Player player=playerRepo.findByEmail(creatorEmail).orElseThrow(()->new NotCreatorException("Not the creator of the match"));
-        if(player!=match.getCreator()){
+        if(player.getId() != match.getCreator().getId()){
             throw new NotCreatorException("Only the leader can start the match");
         }
-        if(match.getMatchStatus()!=MatchStatus.WAITING){
-            throw new MatchStartedException("Match has ended");
+        if(match.getMatchStatus()==MatchStatus.RUNNING || match.getMatchStatus()==MatchStatus.FINISHED){
+            throw new MatchStartedException("Match has already started or finished");
         }
         long players=matchPlayerRepo.countByMatchId(matchId);
         if(players<2){
@@ -116,7 +116,7 @@ public class MatchService {
         response.setCurrentPlayers((int)players);
         return response;
     }
-
+@Transactional
     public MatchResponse finishMatch(long matchId){
         Match match=matchRepo.findById(matchId).orElseThrow(()->new MatchNotFoundException("Match not found"));
         if(match.getMatchStatus()!=MatchStatus.RUNNING){
@@ -125,8 +125,7 @@ public class MatchService {
         match.setMatchStatus(MatchStatus.FINISHED);
         match.setFinishedAt(Instant.now());
         matchRepo.save(match);
-        MatchResponse matchResponse=new MatchResponse(match);
-        return matchResponse;
+        return new MatchResponse(match);
     }
 
     public List<MatchResultResponse> matchResult(long matchId){

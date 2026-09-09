@@ -19,14 +19,16 @@ public class Match {
     private long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private MatchStatus matchStatus;
-
+    @Column(nullable = false)
     private int maxPlayers;
 
     @CreationTimestamp
     private Instant createdAt;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Player creator;
 
     private Instant startedAt;

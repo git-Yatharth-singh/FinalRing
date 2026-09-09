@@ -1,7 +1,6 @@
 package com.example.FinalRing.Controller;
 
 import com.example.FinalRing.Response.ProfileResponse;
-import com.example.FinalRing.Service.JwtService;
 import com.example.FinalRing.Service.ProfileService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

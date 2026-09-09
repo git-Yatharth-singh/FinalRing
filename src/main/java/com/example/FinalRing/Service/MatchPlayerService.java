@@ -24,6 +24,7 @@ public class MatchPlayerService {
         matchPlayer.setMatch(match);
         matchPlayer.setMatchPlayerStatus(MatchPlayerStatus.ALIVE);
         matchPlayer.setKills(0);
+        matchPlayer.setDeaths(0);
         matchPlayer.setJoinedAt(Instant.now());
         matchPlayerRepo.save(matchPlayer);
         return matchPlayer;

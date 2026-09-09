@@ -8,7 +8,6 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @Table(name="player")
 public class Player {
 
@@ -21,6 +20,6 @@ public class Player {
 
     @Column(unique = true,nullable = false)
     private String email;
-
+    @Column(nullable = false)
     private String password;
 }

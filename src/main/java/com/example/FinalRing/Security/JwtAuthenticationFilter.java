@@ -1,5 +1,6 @@
 package com.example.FinalRing.Security;
 
+import com.example.FinalRing.Exception.JwtInvalid;
 import com.example.FinalRing.Service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,10 +28,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
             return;
         }
-        String token=authHeader.substring(7);
-        String email=jwtService.validateToken(token);
-        UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(email,null, AuthorityUtils.NO_AUTHORITIES);
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        filterChain.doFilter(request,response);
+        try {
+            String token = authHeader.substring(7);
+            String email = jwtService.validateToken(token);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, null, AuthorityUtils.NO_AUTHORITIES);
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            filterChain.doFilter(request, response);
+        }
+        catch (JwtInvalid e){
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
     }
 }

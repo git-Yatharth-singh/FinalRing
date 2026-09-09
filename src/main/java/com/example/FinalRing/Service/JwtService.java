@@ -43,7 +43,6 @@ public class JwtService {
                     .getSubject();
         }
         catch (JwtException e) {
-            e.printStackTrace();
             throw new JwtInvalid("Not allowed");
         }
     }

@@ -32,9 +32,9 @@ public class PlayerService {
 
     public String loginPlayer(LoginRequest request){
 
-        Player player=playerRepo.findByEmail(request.getEmail()).orElseThrow(()->new PlayerNotFoundException("Invalid email or password"));
+        Player player=playerRepo.findByEmail(request.getEmail()).orElseThrow(()->new InvalidCredentialsException("Invalid email or password"));
         if(!passwordEncoder.matches(request.getPassword(), player.getPassword())){
-            throw new PlayerNotFoundException("Invalid email or password");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
         return jwtService.generateToken(player.getEmail());
     }
