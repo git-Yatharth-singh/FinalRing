@@ -57,15 +57,13 @@ The project is designed as a learning-first backend engineering project, evolvin
 - [x] Death tracking
 - [x] Match results
 - [x] Player ranking
-
-### Remaining
-- [ ] Automated testing
-- [ ] Concurrency testing
-- [ ] Database integrity review
-- [ ] API cleanup
-- [ ] Security hardening
-- [ ] End-to-end testing
-- [ ] Final V1 review
+- [x] Automated testing
+- [x] Concurrency testing
+- [x] Database integrity review
+- [x] API cleanup
+- [x] Security hardening
+- [x] End-to-end testing
+- [x] Final V1 review
 
 ---
 
@@ -243,10 +241,10 @@ The project is designed as a learning-first backend engineering project, evolvin
 
 # 📌 Current Status
 
-**V1 — In Progress 🟡**
+**V1 — FINISHED **
+**V2 _ IN PROGRESS **
 
-### Done
-Core authentication, JWT security, player profiles, validation, match management, match lifecycle, player tracking, kills/deaths, and match results.
+
 
 ### Remaining
 Testing, concurrency, database integrity, API hardening, security review, end-to-end verification, and final V1 review.
