@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Final Ring WebSocket Test</title>
+</head>
+<body>
+
+<h2>Final Ring WebSocket Test</h2>
+
+<label>Match ID:</label>
+<input id="matchId" type="number" placeholder="e.g. 101">
+
+<br><br>
+
+<button onclick="connect()">Connect</button>
+
+<br><br>
+
+<label>Message:</label>
+<input id="message" type="text" placeholder="Enter message">
+
+<button onclick="sendMessage()">Send</button>
+
+<h3>Messages</h3>
+<div id="messages"></div>
+
+<script>
+    let socket;
+
+    function connect() {
+        const matchId = document.getElementById("matchId").value;
+
+        socket = new WebSocket(
+            "ws://localhost:8080/ws?matchId=" + matchId
+        );
+
+        socket.onopen = function () {
+            addMessage("Connected to match " + matchId);
+        };
+
+        socket.onmessage = function (event) {
+            addMessage("Received: " + event.data);
+        };
+
+        socket.onclose = function () {
+            addMessage("Disconnected");
+        };
+
+        socket.onerror = function () {
+            addMessage("WebSocket error");
+        };
+    }
+
+    function sendMessage() {
+        const message = document.getElementById("message").value;
+
+        socket.send(message);
+
+        addMessage("Sent: " + message);
+    }
+
+    function addMessage(message) {
+        document.getElementById("messages").innerHTML +=
+            "<p>" + message + "</p>";
+    }
+</script>
+
+</body>
+</html>
