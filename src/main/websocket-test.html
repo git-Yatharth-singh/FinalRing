@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,63 +8,94 @@
 
 <h2>Final Ring WebSocket Test</h2>
 
-<label>Match ID:</label>
-<input id="matchId" type="number" placeholder="e.g. 101">
+<label>
+    Match ID:
+    <input type="number" id="matchId" value="1">
+</label>
 
 <br><br>
 
 <button onclick="connect()">Connect</button>
+<button onclick="disconnect()">Disconnect</button>
 
 <br><br>
 
-<label>Message:</label>
-<input id="message" type="text" placeholder="Enter message">
-
+<input type="text" id="message" placeholder="Enter message">
 <button onclick="sendMessage()">Send</button>
 
 <h3>Messages</h3>
-<div id="messages"></div>
+<div id="output"></div>
 
 <script>
-    let socket;
+
+    let socket = null;
 
     function connect() {
-        const matchId = document.getElementById("matchId").value;
 
+        const matchId = document.getElementById("matchId").value;
         socket = new WebSocket(
-            "ws://localhost:8080/ws?matchId=" + matchId
-        );
+        `ws://localhost:8080/ws?matchId=${matchId}`
+    );
+
 
         socket.onopen = function () {
-            addMessage("Connected to match " + matchId);
+            log("Connected!");
         };
 
         socket.onmessage = function (event) {
-            addMessage("Received: " + event.data);
+            log("Received: " + event.data);
         };
 
-        socket.onclose = function () {
-            addMessage("Disconnected");
+        socket.onclose = function (event) {
+            log(
+                "Connection closed. Code: "
+                + event.code
+                + " Reason: "
+                + event.reason
+            );
         };
 
-        socket.onerror = function () {
-            addMessage("WebSocket error");
+        socket.onerror = function (error) {
+            log("WebSocket error");
+            console.error(error);
         };
     }
 
     function sendMessage() {
-        const message = document.getElementById("message").value;
 
-        socket.send(message);
+        if (socket && socket.readyState === WebSocket.OPEN) {
 
-        addMessage("Sent: " + message);
+            const message =
+                document.getElementById("message").value;
+
+            socket.send(message);
+
+            log("Sent: " + message);
+
+        } else {
+            log("WebSocket is not connected.");
+        }
     }
 
-    function addMessage(message) {
-        document.getElementById("messages").innerHTML +=
-            "<p>" + message + "</p>";
+    function disconnect() {
+
+        if (socket) {
+            socket.close();
+        }
     }
+
+    function log(message) {
+
+        const output = document.getElementById("output");
+
+        const line = document.createElement("p");
+        line.textContent = message;
+
+        output.appendChild(line);
+    }
+
 </script>
 
 </body>
 </html>
+```

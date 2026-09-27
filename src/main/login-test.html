@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Final Ring WebSocket Test</title>
+</head>
+
+<body>
+
+<h1>Final Ring WebSocket Test</h1>
+
+<h2>Login</h2>
+
+<input type="email" id="email" placeholder="Email">
+<br><br>
+
+<input type="password" id="password" placeholder="Password">
+<br><br>
+
+<button onclick="login()">Login</button>
+
+<p id="loginStatus"></p>
+
+
+<hr>
+
+<h2>WebSocket</h2>
+
+<label>Match ID:</label>
+<input type="number" id="matchId" value="1">
+
+<br><br>
+
+<button onclick="connect()">Connect</button>
+<button onclick="disconnect()">Disconnect</button>
+
+<br><br>
+
+<input type="text" id="message" placeholder="Enter message">
+<button onclick="sendMessage()">Send</button>
+
+<h3>Messages</h3>
+
+<div id="output"></div>
+
+
+<script>
+
+    let socket = null;
+
+
+    async function login() {
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:8080/auth/login",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    credentials: "include",
+
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                }
+            );
+
+            if (!response.ok) {
+    const errorText = await response.text();
+
+    document.getElementById("loginStatus").innerText =
+        "Login failed: " + response.status + " - " + errorText;
+
+    console.log("Login response:", errorText);
+    return;
+}
+
+            document.getElementById("loginStatus").innerText =
+                "Login successful. Cookie received.";
+
+        } catch (error) {
+
+            console.error(error);
+
+            document.getElementById("loginStatus").innerText =
+                "Login error";
+        }
+    }
+
+
+    function connect() {
+        alert("CONNECT BUTTON CLICKED");
+        const matchId =
+            document.getElementById("matchId").value;
+        console.log("CREATING WEBSOCKET");
+
+
+        socket = new WebSocket(
+            `ws://localhost:8080/ws?matchId=${matchId}`
+        );
+
+
+        socket.onopen = function () {
+            console.log("WEBSOCKET OPEN:", socket);
+            log("WebSocket connected!");
+        };
+
+
+        socket.onmessage = function (event) {
+
+            log("Received: " + event.data);
+        };
+
+
+        socket.onerror = function (error) {
+
+            log("WebSocket error");
+
+            console.error(error);
+        };
+
+
+        socket.onclose = function (event) {
+    console.log(
+        "WEBSOCKET CLOSED:",
+        event.code,
+        event.reason
+    );
+
+    log(
+        "Connection closed. Code: "
+        + event.code
+        + " Reason: "
+        + event.reason
+    );
+};
+    }
+
+
+    function sendMessage() {
+
+        if (socket &&
+            socket.readyState === WebSocket.OPEN) {
+
+            const message =
+                document.getElementById("message").value;
+
+            socket.send(message);
+
+            log("Sent: " + message);
+
+        } else {
+
+            log("WebSocket is not connected.");
+        }
+    }
+
+
+    function disconnect() {
+
+        if (socket) {
+            socket.close();
+        }
+    }
+
+
+    function log(message) {
+
+        const output =
+            document.getElementById("output");
+
+        const line =
+            document.createElement("p");
+
+        line.textContent = message;
+
+        output.appendChild(line);
+    }
+
+</script>
+
+</body>
+</html>
